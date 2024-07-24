@@ -1,0 +1,116 @@
+openapi: 3.0.0
+info:
+  title: Autenticación API
+  description: API para el registro e inicio de sesión de usuarios.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:10000/api
+
+paths:
+  /auth/register:
+    post:
+      summary: Registro de un nuevo usuario.
+      description: Crea un nuevo usuario en la base de datos.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: CarlosManuel
+                password:
+                  type: string
+                  example: miPrimeraApi
+      responses:
+        '201':
+          description: Usuario registrado exitosamente.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Usuario registrado exitosamente
+        '400':
+          description: Error en la solicitud.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: El nombre de usuario ya está en uso
+
+  /auth/login:
+    post:
+      summary: Inicio de sesión de un usuario.
+      description: Autentica a un usuario y devuelve un token JWT.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: CarlosManuel
+                password:
+                  type: string
+                  example: miPrimeraApi
+      responses:
+        '200':
+          description: Autenticación exitosa.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Autenticacion exitosa
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjM0NTY3ODkwIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+        '400':
+          description: Credenciales inválidas.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Credenciales inválidas
+        '500':
+          description: Error interno del servidor.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Error del servidor
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string

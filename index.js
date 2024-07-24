@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/auth');
+const path = require('path');
 require('dotenv').config();
 
 // Crear la aplicación Express
@@ -16,6 +17,9 @@ mongoose.connect(process.env.MONGO_URI, {
     useUnifiedTopology: true
 }).then(() => console.log('MongoDB Conectado'))
     .catch(err => console.error(err));
+
+// Servir archivos estáticos desde la carpeta 'public'
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Rutas
 app.use('/api/auth', authRoutes);
